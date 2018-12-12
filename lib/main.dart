@@ -27,16 +27,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final Loader _loader = Loader();
+  final _loader = Loader();
   final _tracks = List<Track>();
+  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  var _opacity = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _loader.getTopTracks().then((tracks) {
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
+  }
+
+  Future<void> _load() {
+    setState(() {
+      _tracks.clear();
+      _opacity = 0.0;
+    });
+
+    return _loader.getTopTracks().then((tracks) {
       setState(() {
-        _tracks.clear();
         _tracks.addAll(tracks);
+        _opacity = 1.0;
       });
     });
   }
@@ -47,24 +59,30 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView.builder(
-        itemCount: _tracks.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_tracks[index].name),
-            subtitle: Text(_tracks[index].artist),
-            leading: Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: NetworkImage(_tracks[index].imgUrl),
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: () => _load(),
+        child: AnimatedOpacity(
+          duration: Duration(milliseconds: 300),
+          opacity: _opacity,
+          child: ListView.builder(
+            itemCount: _tracks.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(_tracks[index].name),
+                subtitle: Text(_tracks[index].artist),
+                leading: ClipOval(
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    child: Image.network(_tracks[index].imgUrl),
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
+                onTap: () => {},
+              );
+            },
+          ),
+        ),
       ),
     );
   }
@@ -95,9 +113,4 @@ class Track {
   final String imgUrl;
 
   Track({this.name, this.artist, this.imgUrl});
-
-  @override
-  String toString() {
-    return "$name by ($artist)\n";
-  }
 }
