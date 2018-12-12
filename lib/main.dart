@@ -54,36 +54,33 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: () => _load(),
-        child: AnimatedOpacity(
-          duration: Duration(milliseconds: 300),
-          opacity: _opacity,
-          child: ListView.builder(
-            itemCount: _tracks.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(_tracks[index].name),
-                subtitle: Text(_tracks[index].artist),
-                leading: ClipOval(
-                  child: Container(
-                    width: 48,
-                    height: 48,
-                    child: Image.network(_tracks[index].imgUrl),
-                  ),
-                ),
-                onTap: () => {},
-              );
-            },
+  Widget build(BuildContext context) =>
+      Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: () => _load(),
+          child: AnimatedOpacity(
+            duration: Duration(milliseconds: 300),
+            opacity: _opacity,
+            child: ListView.builder(
+                itemCount: _tracks.length,
+                itemBuilder: (context, index) =>
+                    ListTile(
+                      title: Text(_tracks[index].name),
+                      subtitle: Text(_tracks[index].artist),
+                      leading: ClipOval(
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          child: Image.network(_tracks[index].imgUrl),
+                        ),
+                      ),
+                      onTap: () => {},
+                    )),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
