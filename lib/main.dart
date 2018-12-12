@@ -9,11 +9,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'LastFM Top Tracks',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'LastFM Top Chart'),
     );
   }
 }
@@ -35,8 +35,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
+    _load();
+//    WidgetsBinding.instance
+//        .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
   }
 
   Future<void> _load() {
@@ -59,25 +60,27 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: RefreshIndicator(
-          key: _refreshIndicatorKey,
-          onRefresh: () => _load(),
-          child: RefreshWidget(
-            opacity: _opacity,
-            refreshCallback: () => _load(),
-          ),
+        body: RefreshWidget(
+          tracks: _tracks,
+          opacity: _opacity,
+          refreshCallback: () => _load(),
         ),
       );
 }
 
 class RefreshWidget extends RefreshIndicator {
+  final List<Track> tracks;
   final double opacity;
   final RefreshCallback refreshCallback;
 
-  RefreshWidget({this.opacity, this.refreshCallback})
+  RefreshWidget({@required this.tracks,
+    @required this.opacity,
+    @required this.refreshCallback})
       : super(
     child: AnimatedOpacity(
-      child: SongsWidget(),
+      child: SongsWidget(
+        tracks: tracks,
+      ),
       opacity: opacity,
       duration: Duration(milliseconds: 300),
     ),
@@ -88,26 +91,26 @@ class RefreshWidget extends RefreshIndicator {
 class SongsWidget extends StatelessWidget {
   final tracks;
 
-  SongsWidget({this.tracks}) : super();
+  SongsWidget({@required this.tracks}) : super();
 
   @override
   Widget build(BuildContext context) =>
       ListView.builder(
         itemCount: tracks.length,
-        itemBuilder: (context, index) => SongTile(tracks[index]),
+        itemBuilder: (context, index) => SongTile(track: tracks[index]),
       );
 }
 
 class SongTile extends ListTile {
-  SongTile(Track _track)
+  SongTile({@required Track track})
       : super(
-      title: Text(_track.name),
-      subtitle: Text(_track.artist),
+      title: Text(track.name),
+      subtitle: Text(track.artist),
       leading: ClipOval(
         child: Container(
           width: 48,
           height: 48,
-          child: Image.network(_track.imgUrl),
+          child: Image.network(track.imgUrl),
         ),
       ),
       onTap: () => {});
