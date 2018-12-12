@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lol_kek/chartpage.dart';
-import 'package:lol_kek/detailspage.dart';
+import 'package:lol_kek/chart_page.dart';
+import 'package:lol_kek/details_page.dart';
 
 void main() => runApp(MyApp());
 
