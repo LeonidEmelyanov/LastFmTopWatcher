@@ -62,25 +62,53 @@ class _MyHomePageState extends State<MyHomePage> {
         body: RefreshIndicator(
           key: _refreshIndicatorKey,
           onRefresh: () => _load(),
-          child: AnimatedOpacity(
-            duration: Duration(milliseconds: 300),
+          child: RefreshWidget(
             opacity: _opacity,
-            child: ListView.builder(
-                itemCount: _tracks.length,
-                itemBuilder: (context, index) =>
-                    ListTile(
-                      title: Text(_tracks[index].name),
-                      subtitle: Text(_tracks[index].artist),
-                      leading: ClipOval(
-                        child: Container(
-                          width: 48,
-                          height: 48,
-                          child: Image.network(_tracks[index].imgUrl),
-                        ),
-                      ),
-                      onTap: () => {},
-                    )),
+            refreshCallback: () => _load(),
           ),
         ),
       );
+}
+
+class RefreshWidget extends RefreshIndicator {
+  final double opacity;
+  final RefreshCallback refreshCallback;
+
+  RefreshWidget({this.opacity, this.refreshCallback})
+      : super(
+    child: AnimatedOpacity(
+      child: SongsWidget(),
+      opacity: opacity,
+      duration: Duration(milliseconds: 300),
+    ),
+    onRefresh: refreshCallback,
+  );
+}
+
+class SongsWidget extends StatelessWidget {
+  final tracks;
+
+  SongsWidget({this.tracks}) : super();
+
+  @override
+  Widget build(BuildContext context) =>
+      ListView.builder(
+        itemCount: tracks.length,
+        itemBuilder: (context, index) => SongTile(tracks[index]),
+      );
+}
+
+class SongTile extends ListTile {
+  SongTile(Track _track)
+      : super(
+      title: Text(_track.name),
+      subtitle: Text(_track.artist),
+      leading: ClipOval(
+        child: Container(
+          width: 48,
+          height: 48,
+          child: Image.network(_track.imgUrl),
+        ),
+      ),
+      onTap: () => {});
 }
