@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lol_kek/track.dart';
 
-class Loader {
+class ChartLoader {
   final _key = 'd64be117563ee910b260f172319b3001';
 
   Future<List<Track>> getTopTracks() async {
