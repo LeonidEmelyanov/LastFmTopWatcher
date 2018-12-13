@@ -4,31 +4,26 @@ class Track {
   final String imgUrl;
   final Duration duration;
 
-  Track({this.name, this.artist, this.imgUrl, this.duration});
+  final TrackWiki trackWiki;
+
+  Track({this.name, this.artist, this.imgUrl, this.duration, this.trackWiki});
 
   Track.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         artist = json['artist']['name'],
         imgUrl = json['image'][3]["#text"],
-        duration = Duration(seconds: int.parse(json['duration']));
+        duration = Duration(seconds: int.parse(json['duration'])),
+        trackWiki = TrackWiki.fromJson(json['wiki'] ?? Map.identity());
 }
 
-class TrackInfo extends Track {
+class TrackWiki {
   final DateTime published;
   final String summary;
   final String content;
 
-  TrackInfo(
-      {String name,
-      String artist,
-      String imgUrl,
-      String duration,
-      this.published,
-      this.summary,
-      this.content})
-      : super();
+  TrackWiki({this.published, this.summary, this.content}) : super();
 
-  TrackInfo.fromJson(Map<String, dynamic> json)
+  TrackWiki.fromJson(Map<String, dynamic> json)
       : published = json['published'],
         summary = json['summary'],
         content = json['content'];

@@ -65,7 +65,10 @@ class _SongTile extends ListTile {
         Container(
           width: 36,
           alignment: Alignment.centerRight,
-          child: Text("$_position"),
+          child: Text(
+            "$_position",
+            style: TextStyle(fontSize: 18),
+          ),
         ),
         Expanded(
           child: ListTile(
