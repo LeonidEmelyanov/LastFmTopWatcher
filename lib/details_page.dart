@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lol_kek/track.dart';
 
 class DetailsPage extends StatefulWidget {
-  DetailsPage() : super();
+  final Track _track;
+
+  DetailsPage(this._track) : super();
 
   @override
   State<StatefulWidget> createState() => DetailPageState();
@@ -14,7 +17,7 @@ class DetailPageState extends State<DetailsPage> {
           title: Text('Detail'),
         ),
         body: Center(
-          child: Text('Detail'),
+          child: Text(widget._track.name),
         ),
       );
 }
