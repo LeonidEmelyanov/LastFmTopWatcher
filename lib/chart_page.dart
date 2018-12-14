@@ -12,7 +12,6 @@ class _ChartPageState extends State<ChartPage> {
   final _loader = Loader();
   final _tracks = List<Track>();
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
-  var _opacity = 0.0;
 
   @override
   void initState() {
@@ -25,12 +24,10 @@ class _ChartPageState extends State<ChartPage> {
     setState(() {
       _refreshIndicatorKey.currentState?.show();
       _tracks.clear();
-      _opacity = 0.0;
     });
 
     return _loader.getChart().then((tracks) => setState(() {
           _tracks.addAll(tracks);
-          _opacity = 1.0;
         }));
   }
 
@@ -43,7 +40,7 @@ class _ChartPageState extends State<ChartPage> {
           key: _refreshIndicatorKey,
           onRefresh: () => _loadChart(),
           child: AnimatedOpacity(
-            opacity: _opacity,
+            opacity: _tracks.isEmpty ? 0.0 : 1.0,
             duration: Duration(milliseconds: 300),
             child: ListView.builder(
               itemCount: _tracks.length,
