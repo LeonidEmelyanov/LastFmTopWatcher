@@ -8,25 +8,23 @@ class Loader {
   final _baseUrl = "http://ws.audioscrobbler.com/2.0/";
 
   Future<List<Track>> getChart() async {
-    final url = "$_baseUrl?${_getParams({'method': 'chart.gettoptracks'})}";
-    final tracks = List<Track>();
+    final url = "$_baseUrl?${_getParams({
+      'method': 'chart.gettoptracks',
+    })}";
     final response = await http.get(url);
 
-    json.decode(response.body)['tracks']['track'].forEach((track) {
-      tracks.add(Track.fromJson(track));
-    });
-    return tracks;
+    return json.decode(response.body)['tracks']['track'].map<Track>((track) => Track.fromJson(track)).toList();
   }
 
   Future<Track> getTrackInfo(String trackName, String artistName) async {
     final url = "$_baseUrl?${_getParams({
       'method': 'track.getInfo',
       'artist': '$artistName',
-      'track': '$trackName'
+      'track': '$trackName',
     })}";
     final response = await http.get(url);
-    final track = json.decode(response.body)['track'];
-    return Track.fromJson(track);
+
+    return Track.fromJson(json.decode(response.body)['track']);
   }
 
   String _getParams(final Map<String, String> params) {

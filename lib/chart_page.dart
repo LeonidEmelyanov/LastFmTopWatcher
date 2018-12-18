@@ -16,8 +16,7 @@ class _ChartPageState extends State<ChartPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
     _loadChart();
   }
 
@@ -45,8 +44,7 @@ class _ChartPageState extends State<ChartPage> {
             duration: Duration(milliseconds: 300),
             child: ListView.builder(
               itemCount: _tracks.length,
-              itemBuilder: (context, index) =>
-                  _SongTile(_tracks[index], index + 1),
+              itemBuilder: (context, index) => _SongTile(_tracks[index], index + 1),
             ),
           ),
         ),
@@ -71,8 +69,7 @@ class _SongTile extends ListTile {
         ),
         Expanded(
           child: ListTile(
-              title: Text(_track.name,
-                  overflow: TextOverflow.ellipsis, maxLines: 1),
+              title: Text(_track.name, overflow: TextOverflow.ellipsis, maxLines: 1),
               subtitle: Text(_track.artist),
               leading: Hero(
                 tag: "${_track}_image",
@@ -80,15 +77,11 @@ class _SongTile extends ListTile {
                   child: Container(
                     width: 48,
                     height: 48,
-                    child: Image.network(
-                        _track.images[ImageSize.extralarge] ?? ''),
+                    child: Image.network(_track.images[ImageSize.extralarge] ?? ''),
                   ),
                 ),
               ),
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailsPage(_track)))),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsPage(_track)))),
         ),
       ]);
 }

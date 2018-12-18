@@ -3,16 +3,18 @@ class Track {
   final String artist;
   final Images images;
   final Duration duration;
+  final Album album;
   final Wiki trackWiki;
 
-  Track({this.name, this.artist, this.images, this.duration, this.trackWiki});
+  Track({this.name, this.artist, this.images, this.duration, this.album, this.trackWiki});
 
   Track.fromJson(dynamic json)
       : name = json['name'],
         artist = json['artist']['name'],
         images = Images.fromJson(json['image']),
         duration = Duration(seconds: int.parse(json['duration'])),
-        trackWiki = Wiki.fromJson(json['wiki'] ?? Map.identity());
+        album = Album.fromJson(json['album'] ?? {}),
+        trackWiki = Wiki.fromJson(json['wiki'] ?? {});
 
   @override
   String toString() => "$name $artist";
@@ -22,8 +24,15 @@ class Album {
   final String artist;
   final String title;
   final String url;
+  final Images images;
 
-  Album({this.artist, this.title, this.url});
+  Album({this.artist, this.title, this.url, this.images});
+
+  Album.fromJson(dynamic json)
+      : artist = json['artist'],
+        title = json['title'],
+        url = json['url'],
+        images = Images.fromJson(json['image'] ?? []);
 }
 
 class Wiki {
@@ -46,19 +55,14 @@ class Images {
 
   Images({this.images});
 
-  Images.fromJson(dynamic json) : images = _getImageSizes(json);
+  Images.fromJson(dynamic json)
+      : images = Map.fromIterable(
+          json,
+          key: (v) => ImageSize.values.firstWhere((item) => item.toString() == "ImageSize.${v['size']}"),
+          value: (v) => v['#text'],
+        );
 
   String operator [](ImageSize size) => images[size];
-
-  static Map<ImageSize, String> _getImageSizes(List<dynamic> images) {
-    final result = Map<ImageSize, String>();
-
-    images.forEach((image) => result.putIfAbsent(
-        ImageSize.values.firstWhere(
-            (item) => item.toString() == "ImageSize.${image['size']}"),
-        () => image['#text']));
-    return result;
-  }
 }
 
 enum ImageSize { small, medium, large, extralarge }

@@ -30,9 +30,9 @@ class DetailPageState extends State<DetailsPage> {
                       tag: "${_track}_image",
                       child: Container(
                         child: Image(
-                          image:
-                              NetworkImage(_track.images[ImageSize.extralarge]),
+                          image: NetworkImage(_track.images[ImageSize.extralarge]),
                           fit: BoxFit.cover,
+                          alignment: Alignment.center,
                         ),
                       ),
                     ),
