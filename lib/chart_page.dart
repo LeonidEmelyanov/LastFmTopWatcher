@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lol_kek/loader.dart';
 import 'package:lol_kek/details_page.dart';
