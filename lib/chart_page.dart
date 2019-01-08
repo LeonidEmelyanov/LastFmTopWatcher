@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:lol_kek/loader.dart';
 import 'package:lol_kek/details_page.dart';
@@ -12,25 +10,12 @@ class ChartPage extends StatefulWidget {
 
 class _ChartPageState extends State<ChartPage> {
   final _loader = Loader();
-  final _tracks = List<Track>();
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
-    _loadChart();
-  }
-
-  Future<void> _loadChart() async {
-    setState(() {
-      _refreshIndicatorKey.currentState?.show();
-      _tracks.clear();
-    });
-
-    return _loader.getChart().then((tracks) => setState(() {
-          _tracks.addAll(tracks);
-        }));
+    _loader.getChart();
   }
 
   @override
@@ -38,19 +23,45 @@ class _ChartPageState extends State<ChartPage> {
         appBar: AppBar(
           title: Text('LastFM Top Songs'),
         ),
-        body: RefreshIndicator(
-          key: _refreshIndicatorKey,
-          onRefresh: () => _loadChart(),
-          child: AnimatedOpacity(
-            opacity: _tracks.isEmpty ? 0.0 : 1.0,
-            duration: Duration(milliseconds: 300),
-            child: ListView.builder(
-              itemCount: _tracks.length,
-              itemBuilder: (context, index) => _SongTile(_tracks[index], index + 1),
-            ),
-          ),
+        body: StreamBuilder(
+          stream: _loader.chart.stream,
+          builder: (BuildContext context, AsyncSnapshot<List<Track>> snapshot) {
+            if (!snapshot.hasData) {
+              _refreshIndicatorKey.currentState?.show();
+            }
+
+            return RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: snapshot.hasData
+                  ? () async {
+                      return;
+                    }
+                  : () {
+                      return;
+                    },
+              child: _TracksList(snapshot.data ?? []),
+            );
+          },
         ),
       );
+}
+
+class _TracksList extends StatelessWidget {
+  final List<Track> _tracks;
+
+  _TracksList(this._tracks) : super();
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: _tracks.isEmpty ? 0.0 : 1.0,
+      duration: Duration(milliseconds: 300),
+      child: ListView.builder(
+        itemCount: _tracks.length,
+        itemBuilder: (context, index) => _SongTile(_tracks[index], index + 1),
+      ),
+    );
+  }
 }
 
 class _SongTile extends ListTile {
