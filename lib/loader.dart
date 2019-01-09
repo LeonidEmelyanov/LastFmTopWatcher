@@ -15,19 +15,24 @@ class Loader {
 
   factory Loader() => _loader;
 
-  Future<Null> getChart() async {
+  Future<void> getChart() async {
     final url = "$_baseUrl?${_getParams({
       'method': 'chart.gettoptracks',
     })}";
-    final response = await http.get(url);
-
-    chart.add(json
+    
+    try {
+      final response = await http.get(url);
+      
+      chart.add(json
         .decode(response.body)['tracks']['track']
         .map<Track>((track) => Track.fromJson(track))
         .toList());
+    } on Exception catch (e) {
+          chart.addError(e);
+    }
   }
 
-  Future<Null> getTrackInfo(String trackName, String artistName) async {
+  Future<void> getTrackInfo(String trackName, String artistName) async {
     final url = "$_baseUrl?${_getParams({
       'method': 'track.getInfo',
       'artist': '$artistName',
