@@ -19,16 +19,16 @@ class Loader {
     final url = "$_baseUrl?${_getParams({
       'method': 'chart.gettoptracks',
     })}";
-    
+
     try {
       final response = await http.get(url);
-      
+
       chart.add(json
-        .decode(response.body)['tracks']['track']
-        .map<Track>((track) => Track.fromJson(track))
-        .toList());
+          .decode(response.body)['tracks']['track']
+          .map<Track>((track) => Track.fromJson(track))
+          .toList());
     } on Exception catch (e) {
-          chart.addError(e);
+      chart.addError(e);
     }
   }
 

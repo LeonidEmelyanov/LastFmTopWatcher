@@ -41,6 +41,12 @@ class _ChartPageState extends State<ChartPage> {
           },
         ),
       );
+
+  @override
+  void dispose() {
+    _loader.chart.close();
+    super.dispose();
+  }
 }
 
 class _ErrorMessage extends StatelessWidget {
