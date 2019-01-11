@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:lol_kek/track.dart';
+import 'package:lol_kek/src/models/track.dart';
 
 class Loader {
   static final Loader _loader = Loader._internal();
@@ -10,26 +10,18 @@ class Loader {
   final _key = 'd64be117563ee910b260f172319b3001';
   final _baseUrl = "http://ws.audioscrobbler.com/2.0/";
 
-  final chart = StreamController<List<Track>>();
-  final details = StreamController<Track>();
-
   factory Loader() => _loader;
 
-  Future<void> getChart() async {
+  Future<List<Track>> getChart() async {
     final url = "$_baseUrl?${_getParams({
       'method': 'chart.gettoptracks',
     })}";
 
-    try {
-      final response = await http.get(url);
-
-      chart.add(json
-          .decode(response.body)['tracks']['track']
-          .map<Track>((track) => Track.fromJson(track))
-          .toList());
-    } on Exception catch (e) {
-      chart.addError(e);
-    }
+    final response = await http.get(url);
+    return json
+        .decode(response.body)['tracks']['track']
+        .map<Track>((track) => Track.fromJson(track))
+        .toList();
   }
 
   Future<void> getTrackInfo(String trackName, String artistName) async {
@@ -40,7 +32,7 @@ class Loader {
     })}";
     final response = await http.get(url);
 
-    details.add(Track.fromJson(json.decode(response.body)['track']));
+    return Track.fromJson(json.decode(response.body)['track']);
   }
 
   String _getParams(final Map<String, String> params) {

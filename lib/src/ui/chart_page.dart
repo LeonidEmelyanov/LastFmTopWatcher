@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lol_kek/loader.dart';
-import 'package:lol_kek/details_page.dart';
-import 'package:lol_kek/track.dart';
+import 'package:lol_kek/src/models/track.dart';
+import 'package:lol_kek/src/resources/loader.dart';
+import 'package:lol_kek/src/ui/details_page.dart';
 
 class ChartPage extends StatefulWidget {
   @override
