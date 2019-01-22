@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lol_kek/track.dart';
+import 'package:lol_kek/src/models/track.dart';
 
 class DetailsPage extends StatefulWidget {
   final Track _track;

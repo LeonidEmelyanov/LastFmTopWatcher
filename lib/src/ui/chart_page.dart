@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lol_kek/src/blocks/block_provider.dart';
+import 'package:lol_kek/src/blocks/chart_bloc.dart';
 import 'package:lol_kek/src/models/track.dart';
-import 'package:lol_kek/src/resources/loader.dart';
 import 'package:lol_kek/src/ui/details_page.dart';
 
 class ChartPage extends StatefulWidget {
@@ -9,43 +10,37 @@ class ChartPage extends StatefulWidget {
 }
 
 class _ChartPageState extends State<ChartPage> {
-  final _loader = Loader();
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance
-        .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
-    _loader.getChart();
+        .addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text('LastFM Top Songs'),
-        ),
-        body: StreamBuilder(
-          stream: _loader.chart.stream,
-          builder: (BuildContext context, AsyncSnapshot<List<Track>> snapshot) {
-            if (snapshot.hasError) {
-              return _ErrorMessage(snapshot.error);
-            }
-            return RefreshIndicator(
-              key: _refreshIndicatorKey,
-              onRefresh: () async {
-                await _loader.getChart();
-              },
-              child: _TracksList(snapshot.data ?? []),
-            );
-          },
-        ),
-      );
+  Widget build(BuildContext context) {
+    final _chartBloc = BlocProvider.of<ChartBloc>(context);
 
-  @override
-  void dispose() {
-    _loader.chart.close();
-    super.dispose();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('LastFM Top Songs'),
+      ),
+      body: StreamBuilder(
+        stream: _chartBloc.chartData,
+        builder: (BuildContext context, AsyncSnapshot<List<Track>> snapshot) {
+          if (snapshot.hasError) {
+            return _ErrorMessage(snapshot.error);
+          }
+          return RefreshIndicator(
+            key: _refreshIndicatorKey,
+            onRefresh: () => _chartBloc.loadChart(),
+            child: _TracksList(snapshot.data ?? []),
+          );
+        },
+      ),
+    );
   }
 }
 

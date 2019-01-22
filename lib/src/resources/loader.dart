@@ -24,7 +24,7 @@ class Loader {
         .toList();
   }
 
-  Future<void> getTrackInfo(String trackName, String artistName) async {
+  Future<Track> getTrackInfo(String trackName, String artistName) async {
     final url = "$_baseUrl?${_getParams({
       'method': 'track.getInfo',
       'artist': '$artistName',

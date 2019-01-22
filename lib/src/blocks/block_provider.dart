@@ -4,45 +4,43 @@ abstract class BaseBlock {
   void dispose();
 }
 
-class BlockProvider<T extends BaseBlock> extends StatefulWidget {
+class BlocProvider<T extends BaseBlock> extends StatefulWidget {
   final Widget child;
   final T block;
 
-  const BlockProvider({
+  const BlocProvider({
     Key key,
     @required this.child,
     @required this.block,
   }) : super(key: key);
 
   @override
-  _BlockProviderState createState() => _BlockProviderState();
+  _BlocProviderState createState() => _BlocProviderState();
 
   static _typeOf<T>() => T;
 
-  static T of<T extends BaseBlock>(BuildContext context) => (context
-          .ancestorInheritedElementForWidgetOfExactType(
-              _typeOf<BlockProvider<T>>())
-          ?.widget as _BlockInheritedWidget)
-      ?.block;
-}
-
-class _BlockProviderState<T extends BaseBlock> extends State<BlockProvider<T>> {
-  @override
-  Widget build(BuildContext context) {
-    return _BlockInheritedWidget(
-      child: widget?.child,
-      block: widget?.block,
-    );
+  static T of<T extends BaseBlock>(BuildContext context) {
+    final type = _typeOf<BlocProvider<T>>();
+    BlocProvider<T> provider = context.ancestorWidgetOfExactType(type);
+    return provider.block;
   }
 }
 
+class _BlocProviderState<T extends BaseBlock> extends State<BlocProvider<T>> {
+  @override
+  Widget build(BuildContext context) => _BlockInheritedWidget(
+        child: widget?.child,
+        bloc: widget?.block,
+      );
+}
+
 class _BlockInheritedWidget<T> extends InheritedWidget {
-  final T block;
+  final T bloc;
 
   _BlockInheritedWidget({
     Key key,
     @required Widget child,
-    @required this.block,
+    @required this.bloc,
   }) : super(key: key, child: child);
 
   @override
