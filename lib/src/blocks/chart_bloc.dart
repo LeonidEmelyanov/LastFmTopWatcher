@@ -7,18 +7,8 @@ import 'package:lol_kek/src/resources/loader.dart';
 class ChartBloc extends BaseBlock {
   final _loader = Loader();
   final _dataController = StreamController<List<Track>>();
-  final _actionController = StreamController<Track>();
-  final _navigationController = StreamController<Track>();
 
   get chartData => _dataController.stream;
-  get trackClick => _actionController.sink;
-  get openTrack => _navigationController.stream;
-
-  ChartBloc() {
-    _actionController.stream.listen((data) {
-      _navigationController.add(data);
-    });
-  }
 
   Future<void> loadChart() async {
     _dataController.add([]);
@@ -34,7 +24,5 @@ class ChartBloc extends BaseBlock {
   @override
   void dispose() {
     _dataController.close();
-    _actionController.close();
-    _navigationController.close();
   }
 }
