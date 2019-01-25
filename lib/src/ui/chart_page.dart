@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lol_kek/src/blocks/block_provider.dart';
+import 'package:lol_kek/src/blocks/bloc_provider.dart';
 import 'package:lol_kek/src/blocks/chart_bloc.dart';
+import 'package:lol_kek/src/blocks/details_bloc.dart';
 import 'package:lol_kek/src/models/track.dart';
 import 'package:lol_kek/src/ui/details_page.dart';
 
@@ -17,6 +18,11 @@ class _ChartPageState extends State<ChartPage> {
     super.initState();
     WidgetsBinding.instance
         .addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
@@ -128,9 +134,13 @@ class _SongTile extends ListTile {
                 ),
               ),
               onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailsPage(_track)))),
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BlocProvider(
+                              child: DetailsPage(),
+                              block: DetailsBloc(_track),
+                            )),
+                  )),
         ),
       ]);
 }

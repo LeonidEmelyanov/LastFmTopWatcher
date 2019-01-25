@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lol_kek/src/blocks/block_provider.dart';
+import 'package:lol_kek/src/blocks/bloc_provider.dart';
 import 'package:lol_kek/src/blocks/chart_bloc.dart';
 import 'package:lol_kek/src/ui/chart_page.dart';
 

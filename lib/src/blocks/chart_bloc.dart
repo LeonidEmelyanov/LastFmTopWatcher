@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:lol_kek/src/blocks/block_provider.dart';
+import 'package:lol_kek/src/blocks/bloc_provider.dart';
 import 'package:lol_kek/src/models/track.dart';
 import 'package:lol_kek/src/resources/loader.dart';
 
