@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lol_kek/src/blocks/bloc_provider.dart';
-import 'package:lol_kek/src/blocks/chart_bloc.dart';
-import 'package:lol_kek/src/blocks/details_bloc.dart';
+import 'package:lol_kek/src/blocks/chart_model.dart';
+import 'package:lol_kek/src/blocks/details_model.dart';
 import 'package:lol_kek/src/models/track.dart';
 import 'package:lol_kek/src/ui/details_page.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class ChartPage extends StatefulWidget {
   @override
@@ -26,28 +26,18 @@ class _ChartPageState extends State<ChartPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final _chartBloc = BlocProvider.of<ChartBloc>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('LastFM Top Songs'),
-      ),
-      body: StreamBuilder(
-        stream: _chartBloc.chartData,
-        builder: (BuildContext context, AsyncSnapshot<List<Track>> snapshot) {
-          if (snapshot.hasError) {
-            return _ErrorMessage(snapshot.error);
-          }
-          return RefreshIndicator(
-            key: _refreshIndicatorKey,
-            onRefresh: () => _chartBloc.loadChart(),
-            child: _TracksList(snapshot.data ?? []),
-          );
-        },
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text('LastFM Top Songs'),
+        ),
+        body: ScopedModelDescendant<ChartModel>(
+          builder: (context, widget, model) => RefreshIndicator(
+                key: _refreshIndicatorKey,
+                onRefresh: () => model.loadChart(),
+                child: _TracksList(model.tracks),
+              ),
+        ),
+      );
 }
 
 class _ErrorMessage extends StatelessWidget {
@@ -136,10 +126,11 @@ class _SongTile extends ListTile {
               onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BlocProvider(
-                              child: DetailsPage(),
-                              block: DetailsBloc(_track),
-                            )),
+                      builder: (context) => ScopedModel(
+                            model: DetailsModel(_track),
+                            child: DetailsPage(),
+                          ),
+                    ),
                   )),
         ),
       ]);

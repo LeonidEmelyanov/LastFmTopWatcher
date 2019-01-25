@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lol_kek/src/blocks/bloc_provider.dart';
-import 'package:lol_kek/src/blocks/chart_bloc.dart';
+import 'package:lol_kek/src/blocks/chart_model.dart';
 import 'package:lol_kek/src/ui/chart_page.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class App extends StatelessWidget {
   @override
@@ -12,8 +12,8 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BlocProvider(
-        block: ChartBloc(),
+      home: ScopedModel(
+        model: ChartModel(),
         child: ChartPage(),
       ),
     );
