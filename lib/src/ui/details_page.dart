@@ -11,11 +11,9 @@ class DetailsPage extends StatefulWidget {
 }
 
 class DetailPageState extends State<DetailsPage> {
-  DetailsBloc _bloc;
-
   @override
   Widget build(BuildContext context) {
-    _bloc = BlocProvider.of<DetailsBloc>(context);
+    final _bloc = BlocProvider.of<DetailsBloc>(context);
 
     return Scaffold(
       body: StreamBuilder(
