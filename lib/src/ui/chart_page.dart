@@ -91,7 +91,7 @@ class _TracksList extends StatelessWidget {
   }
 }
 
-class _SongTile extends ListTile {
+class _SongTile extends StatelessWidget {
   final Track _track;
   final int _position;
 
@@ -114,7 +114,11 @@ class _SongTile extends ListTile {
               subtitle: Text(_track.artist),
               leading: Hero(
                 tag: "${_track}_image",
-                child: ClipOval(
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Container(
                     width: 48,
                     height: 48,

@@ -11,7 +11,7 @@ class DetailsPage extends StatefulWidget {
 class DetailPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: ScopedModelDescendant<DetailsModel>(
+          body: ScopedModelDescendant<DetailsModel>(
           builder: (context, child, model) => NestedScrollView(
                 headerSliverBuilder: (context, innerBoxIsScrolled) => [
                       SliverAppBar(
