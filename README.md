@@ -1,4 +1,4 @@
-# lol_kek
+# LastFmTopWatcher
 
 A new Flutter project.
 
