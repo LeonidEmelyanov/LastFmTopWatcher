@@ -1,20 +1,26 @@
 import 'dart:async';
 
+import 'package:lol_kek/src/blocks/bloc.dart';
 import 'package:lol_kek/src/models/track.dart';
 import 'package:lol_kek/src/resources/loader.dart';
-import 'package:scoped_model/scoped_model.dart';
 
-class ChartModel extends Model {
+class ChartBloc extends Bloc {
   final _loader = Loader();
-  final _tracks = List<Track>();
+  final _tracks = StreamController<List<Track>>();
 
-  get tracks => _tracks;
+  get tracks => _tracks.stream;
 
-  Future<void> loadChart() async {
-    _tracks.clear();
-    notifyListeners();
+  Future<dynamic> loadChart() async {
+    _tracks.add([]);
+    try {
+      _tracks.add(await _loader.getChart());
+    } catch (e) {
+      _tracks.addError(e);
+    }
+  }
 
-    _tracks.addAll(await _loader.getChart());
-    notifyListeners();
+  @override
+  void dispose() {
+    _tracks.close();
   }
 }

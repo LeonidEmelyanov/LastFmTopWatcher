@@ -3,71 +3,75 @@ import 'package:lol_kek/src/blocks/chart_model.dart';
 import 'package:lol_kek/src/blocks/details_model.dart';
 import 'package:lol_kek/src/models/track.dart';
 import 'package:lol_kek/src/ui/details_page.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:provider/provider.dart';
 
-class ChartPage extends StatefulWidget {
-  @override
-  _ChartPageState createState() => _ChartPageState();
-}
-
-class _ChartPageState extends State<ChartPage> {
+class ChartPage extends StatelessWidget {
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
-  void initState() {
-    super.initState();
+  StatelessElement createElement() {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
+    return super.createElement();
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
+  Widget build(BuildContext context) {
+    final model = Provider.of<ChartBloc>(context);
 
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text('LastFM Top Songs'),
-        ),
-        body: ScopedModelDescendant<ChartModel>(
-          builder: (context, widget, model) => RefreshIndicator(
-                key: _refreshIndicatorKey,
-                onRefresh: () => model.loadChart(),
-                child: _TracksList(model.tracks),
-              ),
-        ),
-      );
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('LastFM Top Songs'),
+      ),
+      body: StreamBuilder<List<Track>>(
+        stream: model.tracks,
+        builder: (context, snapshot) => RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: () => model.loadChart(),
+              child: snapshot.hasError
+                  ? _ErrorMessage(
+                      refreshIndicatorState: _refreshIndicatorKey.currentState)
+                  : _TracksList(snapshot?.data ?? []),
+            ),
+      ),
+    );
+  }
 }
 
 class _ErrorMessage extends StatelessWidget {
-  final Exception _exception;
+  final RefreshIndicatorState refreshIndicatorState;
 
-  const _ErrorMessage(this._exception) : super();
+  const _ErrorMessage({Key key, this.refreshIndicatorState}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            Text(
-              "Error",
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Oops, something went wrong",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
               textScaleFactor: 1.2,
               textAlign: TextAlign.center,
             ),
-            Text(_exception?.toString()),
-            IconButton(
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Press button to refresh"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
               icon: Icon(Icons.refresh),
-              onPressed: () {},
-            )
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
-        ),
+              onPressed: () => refreshIndicatorState.show(),
+            ),
+          )
+        ],
+        mainAxisAlignment: MainAxisAlignment.center,
       ),
     );
   }
@@ -130,9 +134,10 @@ class _SongTile extends StatelessWidget {
               onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ScopedModel(
-                            model: DetailsModel(_track),
+                      builder: (context) => StatefulProvider<DetailsBloc>(
+                            valueBuilder: (context) => DetailsBloc(_track),
                             child: DetailsPage(),
+                            onDispose: (context, value) => value.dispose(),
                           ),
                     ),
                   )),
