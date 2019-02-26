@@ -10,7 +10,8 @@ class DetailsPage extends StatelessWidget {
 
     return Scaffold(
       body: StreamBuilder<Track>(
-        stream: model.track,
+        initialData: model.initialData,
+        stream: model.trackStream,
         builder: (context, snapshot) {
           final track = snapshot.data;
 

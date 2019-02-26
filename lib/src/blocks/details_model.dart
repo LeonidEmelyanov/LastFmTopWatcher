@@ -4,16 +4,15 @@ import 'package:lol_kek/src/blocks/bloc.dart';
 import 'package:lol_kek/src/models/track.dart';
 
 class DetailsBloc extends Bloc {
-  final _track = StreamController<Track>();
+  final _trackController = StreamController<Track>();
+  final Track initialData;
 
-  get track => _track.stream;
+  get trackStream => _trackController.stream;
 
-  DetailsBloc(Track track) {
-    _track.add(track);
-  }
+  DetailsBloc(this.initialData);
 
   @override
   void dispose() {
-    _track.close();
+    _trackController.close();
   }
 }

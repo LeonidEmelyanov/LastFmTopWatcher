@@ -6,21 +6,21 @@ import 'package:lol_kek/src/resources/loader.dart';
 
 class ChartBloc extends Bloc {
   final _loader = Loader();
-  final _tracks = StreamController<List<Track>>();
+  final _tracksController = StreamController<List<Track>>();
 
-  get tracks => _tracks.stream;
+  get tracksStream => _tracksController.stream;
 
   Future<dynamic> loadChart() async {
-    _tracks.add([]);
+    _tracksController.add([]);
     try {
-      _tracks.add(await _loader.getChart());
+      _tracksController.add(await _loader.getChart());
     } catch (e) {
-      _tracks.addError(e);
+      _tracksController.addError(e);
     }
   }
 
   @override
   void dispose() {
-    _tracks.close();
+    _tracksController.close();
   }
 }

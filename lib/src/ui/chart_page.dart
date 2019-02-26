@@ -24,7 +24,7 @@ class ChartPage extends StatelessWidget {
         title: Text('LastFM Top Songs'),
       ),
       body: StreamBuilder<List<Track>>(
-        stream: model.tracks,
+        stream: model.tracksStream,
         builder: (context, snapshot) => RefreshIndicator(
               key: _refreshIndicatorKey,
               onRefresh: () => model.loadChart(),
@@ -113,8 +113,11 @@ class _SongTile extends StatelessWidget {
         ),
         Expanded(
           child: ListTile(
-              title: Text(_track.name,
-                  overflow: TextOverflow.ellipsis, maxLines: 1),
+              title: Text(
+                _track.name,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
               subtitle: Text(_track.artist),
               leading: Hero(
                 tag: "${_track}_image",
