@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:lol_kek/src/blocks/bloc.dart';
+import 'package:bloc_provider/bloc_provider.dart';
 import 'package:lol_kek/src/models/track.dart';
 
 class DetailsBloc extends Bloc {
@@ -12,7 +12,7 @@ class DetailsBloc extends Bloc {
   DetailsBloc(this.initialData);
 
   @override
-  void dispose() {
-    _trackController.close();
+  void dispose() async {
+    await _trackController.close();
   }
 }

@@ -1,9 +1,9 @@
+import 'package:bloc_provider/bloc_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:lol_kek/src/blocks/chart_model.dart';
 import 'package:lol_kek/src/blocks/details_model.dart';
 import 'package:lol_kek/src/models/track.dart';
 import 'package:lol_kek/src/ui/details_page.dart';
-import 'package:provider/provider.dart';
 
 class ChartPage extends StatelessWidget {
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
@@ -17,7 +17,7 @@ class ChartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<ChartBloc>(context);
+    final model = BlocProvider.of<ChartBloc>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -137,10 +137,9 @@ class _SongTile extends StatelessWidget {
               onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => StatefulProvider<DetailsBloc>(
-                            valueBuilder: (context) => DetailsBloc(_track),
+                      builder: (context) => BlocProvider<DetailsBloc>(
+                            creator: (context, bag) => DetailsBloc(_track),
                             child: DetailsPage(),
-                            onDispose: (context, value) => value.dispose(),
                           ),
                     ),
                   )),
