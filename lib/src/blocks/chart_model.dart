@@ -1,10 +1,8 @@
 import 'dart:async';
-
-import 'package:bloc_provider/bloc_provider.dart';
 import 'package:lol_kek/src/models/track.dart';
 import 'package:lol_kek/src/resources/loader.dart';
 
-class ChartBloc extends Bloc {
+class ChartBloc {
   final _loader = Loader();
   final _tracksController = StreamController<List<Track>>();
 
@@ -19,7 +17,6 @@ class ChartBloc extends Bloc {
     }
   }
 
-  @override
   void dispose() async {
     await _tracksController.close();
   }

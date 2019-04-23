@@ -1,12 +1,12 @@
-import 'package:bloc_provider/bloc_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:lol_kek/src/blocks/details_model.dart';
 import 'package:lol_kek/src/models/track.dart';
+import 'package:provider/provider.dart';
 
 class DetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model = BlocProvider.of<DetailsBloc>(context);
+    final model = Provider.of<DetailsBloc>(context);
 
     return Scaffold(
       body: StreamBuilder<Track>(

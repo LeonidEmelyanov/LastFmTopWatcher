@@ -1,4 +1,4 @@
-import 'package:bloc_provider/bloc_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lol_kek/src/blocks/chart_model.dart';
@@ -12,8 +12,9 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BlocProvider<ChartBloc>(
-        creator: (context, bag) => ChartBloc(),
+      home: StatefulProvider<ChartBloc>(
+        valueBuilder: (context) => ChartBloc(),
+        onDispose: (context, bloc) => bloc.dispose(),
         child: ChartPage(),
       ),
     );
