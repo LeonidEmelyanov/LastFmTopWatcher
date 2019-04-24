@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lol_kek/src/blocks/details_model.dart';
+import 'package:lol_kek/src/blocks/details_bloc.dart';
 import 'package:lol_kek/src/models/track.dart';
 import 'package:provider/provider.dart';
 

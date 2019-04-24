@@ -1,7 +1,7 @@
+import 'package:lol_kek/src/blocks/chart_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lol_kek/src/blocks/chart_model.dart';
 import 'package:lol_kek/src/ui/chart_page.dart';
 
 class App extends StatelessWidget {

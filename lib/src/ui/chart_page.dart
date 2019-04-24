@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lol_kek/src/blocks/chart_model.dart';
-import 'package:lol_kek/src/blocks/details_model.dart';
+import 'package:lol_kek/src/blocks/chart_bloc.dart';
+import 'package:lol_kek/src/blocks/details_bloc.dart';
 import 'package:lol_kek/src/models/track.dart';
 import 'package:lol_kek/src/ui/details_page.dart';
 import 'package:provider/provider.dart';
