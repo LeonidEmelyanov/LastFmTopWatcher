@@ -7,10 +7,11 @@ class DetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<DetailsBloc>(context);
+    final track = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       body: StreamBuilder<Track>(
-        initialData: model.initialData,
+        initialData: track,
         stream: model.trackStream,
         builder: (context, snapshot) {
           final track = snapshot.data;

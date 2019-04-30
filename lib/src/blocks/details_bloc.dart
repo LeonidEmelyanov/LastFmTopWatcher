@@ -3,11 +3,10 @@ import 'package:lol_kek/src/models/track.dart';
 
 class DetailsBloc {
   final _trackController = StreamController<Track>();
-  final Track initialData;
 
   get trackStream => _trackController.stream;
 
-  DetailsBloc(this.initialData);
+  set track(Track track) => _trackController.add(track);
 
   void dispose() async {
     await _trackController.close();

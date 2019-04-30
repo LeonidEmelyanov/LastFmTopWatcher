@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lol_kek/src/blocks/chart_bloc.dart';
-import 'package:lol_kek/src/blocks/details_bloc.dart';
 import 'package:lol_kek/src/models/track.dart';
-import 'package:lol_kek/src/ui/details_page.dart';
 import 'package:provider/provider.dart';
 
 class ChartPage extends StatelessWidget {
@@ -113,37 +111,33 @@ class _SongTile extends StatelessWidget {
         ),
         Expanded(
           child: ListTile(
-              title: Text(
-                _track.name,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-              subtitle: Text(_track.artist),
-              leading: Hero(
-                tag: "${_track}_image",
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Container(
-                    width: 48,
-                    height: 48,
-                    child: Image.network(
-                        _track.images[ImageSize.extralarge] ?? ''),
-                  ),
+            title: Text(
+              _track.name,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+            subtitle: Text(_track.artist),
+            leading: Hero(
+              tag: "${_track}_image",
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  child:
+                      Image.network(_track.images[ImageSize.extralarge] ?? ''),
                 ),
               ),
-              onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => StatefulProvider<DetailsBloc>(
-                            valueBuilder: (context) => DetailsBloc(_track),
-                            onDispose: (context, bloc) => bloc.dispose(),
-                            child: DetailsPage(),
-                          ),
-                    ),
-                  )),
+            ),
+            onTap: () => Navigator.pushNamed(
+                  context,
+                  '/details',
+                  arguments: _track,
+                ),
+          ),
         ),
       ]);
 }
