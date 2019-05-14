@@ -32,7 +32,7 @@ class DetailsPage extends StatelessWidget {
                             image: NetworkImage(
                                 track.images[ImageSize.extralarge]),
                             fit: BoxFit.cover,
-                            alignment: Alignment.center,
+                            alignment: Alignment.topCenter
                           ),
                         ),
                       ),
