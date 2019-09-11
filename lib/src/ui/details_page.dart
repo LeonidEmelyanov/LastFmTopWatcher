@@ -5,46 +5,39 @@ import 'package:provider/provider.dart';
 
 class DetailsPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    final model = Provider.of<DetailsBloc>(context);
-    final track = ModalRoute.of(context).settings.arguments;
+  Widget build(BuildContext context) => Scaffold(
+        body: Consumer<DetailsBloc>(
+          builder: (context, bloc, __) {
+            final track =
+                bloc.track ?? ModalRoute.of(context).settings.arguments;
 
-    return Scaffold(
-      body: StreamBuilder<Track>(
-        initialData: track,
-        stream: model.trackStream,
-        builder: (context, snapshot) {
-          final track = snapshot.data;
-
-          return NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                  SliverAppBar(
-                    expandedHeight: 200.0,
-                    floating: false,
-                    pinned: true,
-                    flexibleSpace: FlexibleSpaceBar(
-                      title: Text(track.artist),
-                      centerTitle: true,
-                      background: Hero(
-                        tag: "${track}_image",
-                        child: Container(
-                          child: Image(
+            return NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverAppBar(
+                  expandedHeight: 200.0,
+                  floating: false,
+                  pinned: true,
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Text(track.artist),
+                    centerTitle: true,
+                    background: Hero(
+                      tag: "${track}_image",
+                      child: Container(
+                        child: Image(
                             image: NetworkImage(
                                 track.images[ImageSize.extralarge]),
                             fit: BoxFit.cover,
-                            alignment: Alignment.topCenter
-                          ),
-                        ),
+                            alignment: Alignment.topCenter),
                       ),
                     ),
-                  )
-                ],
-            body: Center(
-              child: Text("Album: ${track.name}"),
-            ),
-          );
-        },
-      ),
-    );
-  }
+                  ),
+                )
+              ],
+              body: Center(
+                child: Text("Album: ${track.name}"),
+              ),
+            );
+          },
+        ),
+      );
 }

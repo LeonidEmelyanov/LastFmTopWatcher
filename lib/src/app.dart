@@ -25,14 +25,12 @@ class App extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        '/': (builder) => StatefulProvider<ChartBloc>(
-              valueBuilder: (context) => ChartBloc(),
-              onDispose: (context, bloc) => bloc.dispose(),
+        '/': (builder) => ChangeNotifierProvider.value(
+              value: ChartBloc(),
               child: ChartPage(),
             ),
-        '/details': (builder) => StatefulProvider<DetailsBloc>(
-              valueBuilder: (context) => DetailsBloc(),
-              onDispose: (context, bloc) => bloc.dispose(),
+        '/details': (builder) => ChangeNotifierProvider.value(
+              value: DetailsBloc(),
               child: DetailsPage(),
             ),
       },

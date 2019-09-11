@@ -14,26 +14,21 @@ class ChartPage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final model = Provider.of<ChartBloc>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('LastFM Top Songs'),
-      ),
-      body: StreamBuilder<List<Track>>(
-        stream: model.tracksStream,
-        builder: (context, snapshot) => RefreshIndicator(
-              key: _refreshIndicatorKey,
-              onRefresh: () => model.loadChart(),
-              child: snapshot.hasError
-                  ? _ErrorMessage(
-                      refreshIndicatorState: _refreshIndicatorKey.currentState)
-                  : _TracksList(snapshot?.data ?? []),
-            ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text('LastFM Top Songs'),
+        ),
+        body: Consumer<ChartBloc>(
+          builder: (_, bloc, __) => RefreshIndicator(
+            key: _refreshIndicatorKey,
+            onRefresh: () => bloc.loadChart(),
+            child: bloc.error == null
+                ? _TracksList(bloc.tracks)
+                : _ErrorMessage(
+                    refreshIndicatorState: _refreshIndicatorKey.currentState),
+          ),
+        ),
+      );
 }
 
 class _ErrorMessage extends StatelessWidget {
@@ -133,10 +128,10 @@ class _SongTile extends StatelessWidget {
               ),
             ),
             onTap: () => Navigator.pushNamed(
-                  context,
-                  '/details',
-                  arguments: _track,
-                ),
+              context,
+              '/details',
+              arguments: _track,
+            ),
           ),
         ),
       ]);

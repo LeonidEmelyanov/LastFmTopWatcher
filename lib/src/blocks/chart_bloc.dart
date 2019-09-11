@@ -1,23 +1,25 @@
 import 'dart:async';
+import 'package:flutter/widgets.dart';
 import 'package:lol_kek/src/models/track.dart';
 import 'package:lol_kek/src/resources/loader.dart';
 
-class ChartBloc {
+class ChartBloc extends ChangeNotifier {
   final _loader = Loader();
-  final _tracksController = StreamController<List<Track>>();
+  var _tracks = List<Track>();
+  dynamic _error;
 
-  get tracksStream => _tracksController.stream;
+  get tracks => _tracks;
+  get error => _error;
 
   Future<dynamic> loadChart() async {
-    _tracksController.add([]);
-    try {
-      _tracksController.add(await _loader.getChart());
-    } catch (e) {
-      _tracksController.addError(e);
-    }
-  }
+    _tracks.clear();
+    _error = null;
+    notifyListeners();
 
-  void dispose() async {
-    await _tracksController.close();
+    return await _loader
+        .getChart()
+        .then((tracks) => _tracks.addAll(tracks))
+        .catchError((error) => _error = error)
+        .whenComplete(() => notifyListeners());
   }
 }

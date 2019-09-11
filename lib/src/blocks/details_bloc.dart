@@ -1,14 +1,12 @@
-import 'dart:async';
+import 'package:flutter/widgets.dart';
 import 'package:lol_kek/src/models/track.dart';
 
-class DetailsBloc {
-  final _trackController = StreamController<Track>();
+class DetailsBloc extends ChangeNotifier {
+  Track _track;
 
-  get trackStream => _trackController.stream;
-
-  set track(Track track) => _trackController.add(track);
-
-  void dispose() async {
-    await _trackController.close();
+  get track => _track;
+  set track(Track track) {
+    _track = track;
+    notifyListeners();
   }
 }
