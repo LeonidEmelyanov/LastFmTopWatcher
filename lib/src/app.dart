@@ -1,8 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:lol_kek/src/blocks/chart_bloc.dart';
-import 'package:lol_kek/src/blocks/details_bloc.dart';
 import 'package:lol_kek/src/themes.dart';
-import 'package:lol_kek/src/ui/details_page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
