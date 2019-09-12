@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lol_kek/src/blocks/chart_bloc.dart';
+import 'package:lol_kek/src/blocks/details_bloc.dart';
 import 'package:lol_kek/src/models/track.dart';
+import 'package:lol_kek/src/ui/details_page.dart';
 import 'package:provider/provider.dart';
 
 class ChartPage extends StatelessWidget {
@@ -127,11 +129,13 @@ class _SongTile extends StatelessWidget {
                 ),
               ),
             ),
-            onTap: () => Navigator.pushNamed(
-              context,
-              '/details',
-              arguments: _track,
-            ),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => ChangeNotifierProvider.value(
+                          value: DetailsBloc(_track),
+                          child: DetailsPage(),
+                        ))),
           ),
         ),
       ]);

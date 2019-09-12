@@ -7,25 +7,21 @@ class DetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Consumer<DetailsBloc>(
-          builder: (context, bloc, __) {
-            final track =
-                bloc.track ?? ModalRoute.of(context).settings.arguments;
-
-            return NestedScrollView(
+          builder: (context, bloc, __) => NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 SliverAppBar(
                   expandedHeight: 200.0,
                   floating: false,
                   pinned: true,
                   flexibleSpace: FlexibleSpaceBar(
-                    title: Text(track.artist),
+                    title: Text(bloc.track.artist),
                     centerTitle: true,
                     background: Hero(
-                      tag: "${track}_image",
+                      tag: "${bloc.track}_image",
                       child: Container(
                         child: Image(
                             image: NetworkImage(
-                                track.images[ImageSize.extralarge]),
+                                bloc.track.images[ImageSize.extralarge]),
                             fit: BoxFit.cover,
                             alignment: Alignment.topCenter),
                       ),
@@ -34,10 +30,9 @@ class DetailsPage extends StatelessWidget {
                 )
               ],
               body: Center(
-                child: Text("Album: ${track.name}"),
+                child: Text("Album: ${bloc.track.name}"),
               ),
-            );
-          },
+            ),
         ),
       );
 }

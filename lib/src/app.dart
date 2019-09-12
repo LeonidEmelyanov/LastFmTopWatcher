@@ -23,17 +23,10 @@ class App extends StatelessWidget {
         accentColor: AppColors.accentColor,
         canvasColor: Colors.transparent,
       ),
-      initialRoute: "/",
-      routes: {
-        '/': (builder) => ChangeNotifierProvider.value(
-              value: ChartBloc(),
-              child: ChartPage(),
-            ),
-        '/details': (builder) => ChangeNotifierProvider.value(
-              value: DetailsBloc(),
-              child: DetailsPage(),
-            ),
-      },
+      home: ChangeNotifierProvider.value(
+        value: ChartBloc(),
+        child: ChartPage(),
+      ),
     );
   }
 }
