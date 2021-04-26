@@ -9,13 +9,14 @@ class Loader {
   static final _key = 'd64be117563ee910b260f172319b3001';
 
   final Dio _dio = Dio(BaseOptions()
-    ..baseUrl = "http://ws.audioscrobbler.com/2.0"
+    ..baseUrl = "https://ws.audioscrobbler.com/2.0"
     ..responseType = ResponseType.plain)
     ..interceptors.add(InterceptorsWrapper(
-        onRequest: (options) => options.queryParameters.addAll({
-              "api_key": _key,
-              "format": "json",
-            })));
+        onRequest: (options, handler) => handler.next(options
+          ..queryParameters.addAll({
+            "api_key": _key,
+            "format": "json",
+          }))));
 
   factory Loader() => _loader;
 
@@ -30,11 +31,14 @@ class Loader {
   }
 
   Future<Track> getTrackInfo(String trackName, String artistName) async {
-    final response = await _dio.get('/', queryParameters: {
-      'method': 'track.getInfo',
-      'artist': '$artistName',
-      'track': '$trackName',
-    },);
+    final response = await _dio.get(
+      '/',
+      queryParameters: {
+        'method': 'track.getInfo',
+        'artist': '$artistName',
+        'track': '$trackName',
+      },
+    );
 
     return Track.fromJson(json.decode(response.data)['track']);
   }

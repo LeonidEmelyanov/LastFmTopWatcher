@@ -5,7 +5,7 @@ import 'package:lol_kek/src/resources/loader.dart';
 
 class ChartBloc extends ChangeNotifier {
   final _loader = Loader();
-  var _tracks = List<Track>();
+  var _tracks = <Track>[];
   dynamic _error;
 
   get tracks => _tracks;
